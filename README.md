@@ -44,7 +44,7 @@ A real-time energy management dashboard for the **Koh Tao Island Smart Grid** (P
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-org>/grid-guardian-frontend.git
+git clone https://github.com/9Ten/grid-guardian-frontend.git
 cd grid-guardian-frontend
 
 # Install dependencies
@@ -112,7 +112,7 @@ This project is deployed on **Vercel**. See [DEPLOYING.md](DEPLOYING.md) for the
 
 ### Deploy to Vercel (one-click)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/<your-org>/grid-guardian-frontend)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/9Ten/grid-guardian-frontend)
 
 ### Manual Vercel Deployment
 
