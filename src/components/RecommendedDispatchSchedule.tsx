@@ -66,8 +66,8 @@ export default function RecommendedDispatchSchedule({ data }: Props) {
             </p>
           </div>
           <a
-            href="/kohtao_dispatch_order_17h30.pdf"
-            download="kohtao_dispatch_order_17h30.pdf"
+            href="/kohtao_dispatch_order_17h30_th.pdf"
+            download="kohtao_dispatch_order_17h30_th.pdf"
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-pea-700 text-[12px] font-semibold rounded hover:bg-pea-50 transition-colors whitespace-nowrap"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
