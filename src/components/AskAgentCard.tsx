@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Bot, Factory, BatteryCharging, Droplets, ChevronRight } from 'lucide-react'
 
 const PRESET_QUESTIONS = [
@@ -27,19 +27,35 @@ const FALLBACK_RESPONSE =
 
 export default function AskAgentCard() {
   const [inputValue, setInputValue] = useState('')
-  const [response, setResponse] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [displayed, setDisplayed] = useState('')
+  const [streaming, setStreaming] = useState(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  function startStream(text: string) {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    setDisplayed('')
+    setStreaming(true)
+    let i = 0
+    intervalRef.current = setInterval(() => {
+      i++
+      setDisplayed(text.slice(0, i))
+      if (i >= text.length) {
+        clearInterval(intervalRef.current!)
+        intervalRef.current = null
+        setStreaming(false)
+      }
+    }, 18)
+  }
+
+  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current) }, [])
 
   function handleSubmit() {
     const trimmed = inputValue.trim()
-    if (!trimmed) return
-    setLoading(true)
-    setResponse(null)
+    if (!trimmed || streaming) return
     const matched = PRESET_QUESTIONS.find(q => q.question === trimmed)
-    setTimeout(() => {
-      setResponse(matched ? matched.response : FALLBACK_RESPONSE)
-      setLoading(false)
-    }, 800)
+    setTimeout(() => startStream(matched ? matched.response : FALLBACK_RESPONSE), 500)
+    setDisplayed('')
+    setStreaming(true)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -79,12 +95,13 @@ export default function AskAgentCard() {
         ))}
       </div>
 
-      {/* Mock response */}
-      {(loading || response) && (
+      {/* Streaming response */}
+      {(streaming || displayed) && (
         <div className="mx-2 mb-2 p-2 bg-indigo-50 border border-indigo-100 rounded flex gap-1.5">
           <Bot size={12} className="text-pea-700 shrink-0 mt-0.5" />
           <p className="text-xs text-gray-700 leading-snug">
-            {loading ? 'กำลังวิเคราะห์…' : response}
+            {displayed}
+            {streaming && <span className="animate-pulse">▍</span>}
           </p>
         </div>
       )}
@@ -101,7 +118,7 @@ export default function AskAgentCard() {
         />
         <button
           onClick={handleSubmit}
-          disabled={loading}
+          disabled={streaming}
           className="text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 px-3 py-1.5 rounded transition-colors shrink-0"
         >
           ASK ↗
